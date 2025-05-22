@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+const blogDir = path.resolve('./content/blog');
+const posts = fs.readdirSync(blogDir).map(file => ({
+  slug: file.replace('.md', ''),
+  title: file.replace(/[-_]/g, ' ').replace('.md', '').replace(/\b\w/g, l => l.toUpperCase())
+}));
+---
+<Layout title="DevAIHub Blog">
+  <h2 class="text-3xl font-semibold mb-6">Latest Articles</h2>
+  <ul class="grid gap-4">
+    {posts.map(post => (
+      <li class="border p-4 rounded hover:shadow-md">
+        <a href={`/blog/${post.slug}`} class="text-xl text-blue-600 hover:underline">{post.title}</a>
+      </li>
+    ))}
+  </ul>
+</Layout>

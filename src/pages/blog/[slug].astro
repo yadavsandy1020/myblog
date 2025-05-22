@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const blogDir = path.resolve('./content/blog');
+  const files = fs.readdirSync(blogDir);
+  return files.map(file => ({
+    params: { slug: file.replace('.md', '') }
+  }));
+}
+
+const { slug } = Astro.params;
+const filePath = new URL(`../../../content/blog/${slug}.md`, import.meta.url);
+const markdownContent = await fs.promises.readFile(filePath, 'utf-8');
+
+// Remove frontmatter before rendering markdown
+const frontmatterMatch = markdownContent.match(/---\n([\s\S]*?)\n---/);
+const markdownBody = frontmatterMatch ? markdownContent.slice(frontmatterMatch[0].length).trim() : markdownContent;
+
+const renderedHTML = marked(markdownBody);
+---
+
+<Layout title={slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}>
+  <article class="prose prose-blue lg:prose-xl max-w-4xl mx-auto bg-white p-8 rounded shadow">
+    <div set:html={renderedHTML} />
+  </article>
+</Layout>

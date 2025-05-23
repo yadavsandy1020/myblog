@@ -65,4 +65,4 @@ Upcoming topics:
 - 🌟 Explainable AI libraries  
 - 🧩 ML Ops frameworks for scaling  
 
-Stay tuned to DevAIHub for your AI/ML toolkit updates!
+Stay tuned to aitoolsfordevs for your AI/ML toolkit updates!

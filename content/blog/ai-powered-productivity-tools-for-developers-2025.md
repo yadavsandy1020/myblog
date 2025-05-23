@@ -62,4 +62,4 @@ I’m really excited about what’s around the corner:
 ---
 
 Keep experimenting and stay ahead of the curve—these AI helpers are only going to get better!  
-DevAIHub is here to keep you updated every step of the way.
+aitoolsfordevs is here to keep you updated every step of the way.

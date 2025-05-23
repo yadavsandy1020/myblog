@@ -56,4 +56,4 @@ We’ll cover:
 - 📊 Test data generation with AI  
 - 🛡️ Automated compliance checks  
 
-Follow DevAIHub for weekly AI insights to keep your dev lifecycle future-proof!
+Follow aitoolsfordevs for weekly AI insights to keep your dev lifecycle future-proof!

@@ -12,19 +12,18 @@ export async function get() {
     const pubDate = match ? match[1] : '2025-01-01';
 
     return `
-      <url>
-        <loc>https://www.aitoolsfordevs.in/blog/${slug}</loc>
-        <lastmod>${pubDate}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-      </url>
-    `;
+  <url>
+    <loc>https://www.aitoolsfordevs.in/blog/${slug}</loc>
+    <lastmod>${pubDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
   });
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${urls.join('\n')}
-  </urlset>`;
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('\n')}
+</urlset>`;
 
   return new Response(sitemap, {
     headers: {

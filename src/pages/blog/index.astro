@@ -9,7 +9,7 @@ const posts = fs.readdirSync(blogDir).map(file => ({
   title: file.replace(/[-_]/g, ' ').replace('.md', '').replace(/\b\w/g, l => l.toUpperCase())
 }));
 ---
-<Layout title="aitoolsfordevs Blog">
+<Layout title="DevAIHub Blog">
   <h2 class="text-3xl font-semibold mb-6">Latest Articles</h2>
   <ul class="grid gap-4">
     {posts.map(post => (

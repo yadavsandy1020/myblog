@@ -4,57 +4,27 @@ import fs from 'fs';
 import path from 'path';
 import { marked } from 'marked';
 
+export async function getStaticPaths() {
+  const blogDir = path.resolve('./content/blog');
+  const files = fs.readdirSync(blogDir);
+  return files.map(file => ({
+    params: { slug: file.replace('.md', '') }
+  }));
+}
+
 const { slug } = Astro.params;
 const filePath = new URL(`../../../content/blog/${slug}.md`, import.meta.url);
 const markdownContent = await fs.promises.readFile(filePath, 'utf-8');
-const renderedHTML = marked(markdownContent);
 
-// Extract frontmatter (simple regex)
-const match = markdownContent.match(/---\n([\s\S]*?)\n---/);
-const frontmatterRaw = match ? match[1] : '';
+// Remove frontmatter before rendering markdown
+const frontmatterMatch = markdownContent.match(/---\n([\s\S]*?)\n---/);
+const markdownBody = frontmatterMatch ? markdownContent.slice(frontmatterMatch[0].length).trim() : markdownContent;
 
-// Helper to extract fields from frontmatter
-const extract = (field) => {
-  const reg = new RegExp(`${field}:\\s*["']?(.+?)["']?\\n`);
-  const res = frontmatterRaw.match(reg);
-  return res ? res[1] : '';
-};
-
-const title = extract("title") || 'Untitled Post';
-const description = extract("description") || '';
-const datePublished = extract("pubDate") || '';
-const image = extract("image") || '';
-const url = `https://www.aitoolsfordevs.in/blog/${slug}`;
-
-const blogJsonLD = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": title,
-  "description": description,
-  "datePublished": datePublished,
-  "author": {
-    "@type": "Person",
-    "name": "aitoolsfordevs Team"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "aitoolsfordevs",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://www.aitoolsfordevs.in/logo.png"
-    }
-  },
-  "image": image,
-  "url": url
-};
+const renderedHTML = marked(markdownBody);
 ---
 
-<Layout title={title} description={description} image={image} url={url}>
-  <head>
-    <script type="application/ld+json" set:html={JSON.stringify(blogJsonLD)} />
-  </head>
-
-  <article class="prose lg:prose-xl max-w-4xl mx-auto bg-white p-8 rounded shadow">
+<Layout title={slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}>
+  <article class="prose prose-blue lg:prose-xl max-w-4xl mx-auto bg-white p-8 rounded shadow">
     <div set:html={renderedHTML} />
   </article>
 </Layout>

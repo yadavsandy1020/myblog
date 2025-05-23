@@ -1,11 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function get() {
+export async function GET() {
   const blogDir = path.resolve('./content/blog');
   const files = fs.readdirSync(blogDir);
 
-  const urls = files.map(file => {
+  const urls = files.map((file) => {
     const slug = file.replace('.md', '');
     const content = fs.readFileSync(path.join(blogDir, file), 'utf-8');
     const match = content.match(/pubDate:\s*["']?([\d-]+)["']?/);

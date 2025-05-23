@@ -9,20 +9,22 @@ const filePath = new URL(`../../../content/blog/${slug}.md`, import.meta.url);
 const markdownContent = await fs.promises.readFile(filePath, 'utf-8');
 const renderedHTML = marked(markdownContent);
 
-// Extract frontmatter (simplified)
+// Extract frontmatter (simple regex)
 const match = markdownContent.match(/---\n([\s\S]*?)\n---/);
 const frontmatterRaw = match ? match[1] : '';
 
+// Helper to extract fields from frontmatter
 const extract = (field) => {
   const reg = new RegExp(`${field}:\\s*["']?(.+?)["']?\\n`);
   const res = frontmatterRaw.match(reg);
   return res ? res[1] : '';
 };
 
-const title = extract("title");
-const description = extract("description");
-const datePublished = extract("pubDate");
-const image = extract("image");
+const title = extract("title") || 'Untitled Post';
+const description = extract("description") || '';
+const datePublished = extract("pubDate") || '';
+const image = extract("image") || '';
+const url = `https://www.aitoolsfordevs.in/blog/${slug}`;
 
 const blogJsonLD = {
   "@context": "https://schema.org",
@@ -39,15 +41,15 @@ const blogJsonLD = {
     "name": "aitoolsfordevs",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://www.aitoolsfordevs.in/logo.png" // Replace with your real logo URL
+      "url": "https://www.aitoolsfordevs.in/logo.png"
     }
   },
   "image": image,
-  "url": `https://www.aitoolsfordevs.in/blog/${slug}`
+  "url": url
 };
 ---
 
-<Layout title={title}>
+<Layout title={title} description={description} image={image} url={url}>
   <head>
     <script type="application/ld+json" set:html={JSON.stringify(blogJsonLD)} />
   </head>
